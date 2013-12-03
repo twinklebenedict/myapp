@@ -20,6 +20,7 @@ public class DriveSyncer {
 	private Context context;
 	private Account account;
 	private Drive service;
+	private static String fileId = "";
 
 	public DriveSyncer(Context context, Account account) {
 		this.context = context;
@@ -41,10 +42,17 @@ public class DriveSyncer {
 					body.setTitle(fileContent.getName());
 					body.setMimeType("text/plain");
 
-					File file = service.files().insert(body, textContent).execute();
-					if (file != null) {
-						showToast("Text uploaded: " + file.getTitle());
+					File driveFile = service.files().get(fileId).execute();
+					if (driveFile != null) {
+						service.files().update(fileId, driveFile, textContent);
+					} else {
+						driveFile = service.files().insert(body, textContent).execute();
+						if (driveFile != null) {
+							fileId = driveFile.getId();
+							showToast("Text uploaded: " + driveFile.getTitle());
+						}
 					}
+
 				} catch (UserRecoverableAuthIOException e) {
 					// context.startActivityForResult(e.getIntent(), MainActivity.REQUEST_AUTHORIZATION);
 				} catch (Exception e) {
