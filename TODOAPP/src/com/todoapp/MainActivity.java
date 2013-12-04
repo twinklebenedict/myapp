@@ -39,6 +39,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		Utils.restoreBackup(this);
 		credential = GoogleAccountCredential.usingOAuth2(this, Arrays.asList(DriveScopes.DRIVE));
 		startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
 
@@ -54,7 +55,7 @@ public class MainActivity extends Activity {
 		Button save = (Button) findViewById(R.id.save);
 
 		// Set text todoList
-		String data = Utils.readFromFile(this);
+		String data = Utils.readFromFile(this, Constants.fileName);
 		todoList.setText(data);
 
 		save.setOnClickListener(new OnClickListener() {
@@ -62,7 +63,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 
-				Utils.writeToFile(todoList.getText().toString(), MainActivity.this);
+				Utils.writeToFile(todoList.getText().toString(), MainActivity.this, Constants.fileName);
 				// Utils.saveFileToDrive(MainActivity.this, mAccount);
 
 			}
@@ -72,7 +73,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				String data = Utils.readFromFile(MainActivity.this);
+				String data = Utils.readFromFile(MainActivity.this, Constants.fileName);
 				todoList.setText(data);
 			}
 		});

@@ -3,6 +3,7 @@ package com.todoapp;
 import java.util.Arrays;
 
 import android.accounts.Account;
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -42,14 +43,23 @@ public class DriveSyncer {
 					body.setTitle(fileContent.getName());
 					body.setMimeType("text/plain");
 
-					File driveFile = service.files().get(fileId).execute();
-					if (driveFile != null) {
-						service.files().update(fileId, driveFile, textContent);
-					} else {
-						driveFile = service.files().insert(body, textContent).execute();
+					synchronized (fileId) {
+						File driveFile = null;
+						if(fileId.equals("")){
+							populateFileID();
+						}
+						if (!fileId.equals("")) {
+							driveFile = service.files().get(fileId).execute();
+						}
 						if (driveFile != null) {
-							fileId = driveFile.getId();
-							showToast("Text uploaded: " + driveFile.getTitle());
+							driveFile = service.files().update(fileId, driveFile, textContent).execute();
+						} else {
+//							driveFile = service.files().insert(body, textContent).execute();
+							if (driveFile != null) {
+								fileId = driveFile.getId();
+								Utils.writeToFile(fileId, context, MyBackupAgent.FILE_ID);
+								showToast("Text uploaded: " + driveFile.getTitle());
+							}
 						}
 					}
 
@@ -79,6 +89,10 @@ public class DriveSyncer {
 		GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(DriveScopes.DRIVE));
 		credential.setSelectedAccountName(account.name);
 		return new Drive.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential).build();
+	}
+	
+	private void populateFileID() {
+		fileId = Utils.readFromFile(context, MyBackupAgent.FILE_ID);
 	}
 
 }

@@ -18,29 +18,34 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 
 import android.accounts.Account;
+import android.app.backup.BackupManager;
+import android.app.backup.RestoreObserver;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
 public class Utils{
 	
-	public static void writeToFile(String data, Context context) {
+	public static void writeToFile(String data, Context context, String fileName) {
 		try {
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(Constants.fileName, Context.MODE_PRIVATE));
+			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fileName, Context.MODE_PRIVATE));
 			outputStreamWriter.write(data);
 			outputStreamWriter.close();
+//			if(fileName.equals(BackupAgent.FILE_ID)){
+				requestBackup(context);
+//			}
 		} catch (IOException e) {
 			Log.e("TAG", "File write failed: " + e.toString());
 		}
 
 	}
 	
-	public static String readFromFile(Context context) {
+	public static String readFromFile(Context context, String fileName) {
 
 		String ret = "";
 
 		try {
-			InputStream inputStream = context.openFileInput(Constants.fileName);
+			InputStream inputStream = context.openFileInput(fileName);
 
 			if (inputStream != null) {
 				InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -62,6 +67,16 @@ public class Utils{
 		}
 
 		return ret;
+	}
+	
+	public static void requestBackup(Context context) {
+		   BackupManager bm = new BackupManager(context);
+		   bm.dataChanged();
+	}
+	
+	public static void restoreBackup(Context context) {
+		   BackupManager bm = new BackupManager(context);
+		   bm.requestRestore(new RestoreObserver() {});
 	}
 	
 }

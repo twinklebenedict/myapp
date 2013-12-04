@@ -1,9 +1,12 @@
-# view AndroidManifest.xml #generated:26
+# view AndroidManifest.xml #generated:30
 -keep class com.todoapp.MainActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:36
+# view AndroidManifest.xml #generated:20
+-keep class com.todoapp.MyBackupAgent { <init>(...); }
+
+# view AndroidManifest.xml #generated:40
 -keep class com.todoapp.SyncProvider { <init>(...); }
 
-# view AndroidManifest.xml #generated:42
+# view AndroidManifest.xml #generated:46
 -keep class com.todoapp.SyncService { <init>(...); }
 
