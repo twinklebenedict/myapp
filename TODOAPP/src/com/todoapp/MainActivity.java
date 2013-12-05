@@ -6,6 +6,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.backup.BackupManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -57,7 +58,10 @@ public class MainActivity extends Activity {
 		// Set text todoList
 		String data = Utils.readFromFile(this, Constants.fileName);
 		todoList.setText(data);
-
+		
+		BackupManager mgr = new BackupManager(getApplicationContext());
+		mgr.dataChanged();
+		
 		save.setOnClickListener(new OnClickListener() {
 
 			@Override

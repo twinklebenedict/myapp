@@ -3,7 +3,6 @@ package com.todoapp;
 import java.util.Arrays;
 
 import android.accounts.Account;
-import android.app.backup.BackupManager;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -13,6 +12,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.client.http.FileContent;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.Drive.Builder;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 
@@ -88,7 +88,9 @@ public class DriveSyncer {
 	public Drive getDriveService() {
 		GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(DriveScopes.DRIVE));
 		credential.setSelectedAccountName(account.name);
-		return new Drive.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential).build();
+		Builder builder = new Drive.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential);
+		builder.setApplicationName("todoapp");
+		return builder.build();
 	}
 	
 	private void populateFileID() {

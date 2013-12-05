@@ -14,15 +14,12 @@ public class MyBackupAgent extends BackupAgentHelper{
 	public static String FILE_ID = "fileid.txt";
 	public static String BACKUP_KEY = "files";
 	
-	public MyBackupAgent() {
-		super();
-	}
 	
 	@Override
 	public void onCreate() {
 		FileBackupHelper helper = new FileBackupHelper(this, FILE_ID);
         addHelper(BACKUP_KEY, helper);
-        Log.d("Test", "Adding backupagent...");
+        Log.i("Test", "Adding backupagent... ##############");
 	}
 	
 	@Override
