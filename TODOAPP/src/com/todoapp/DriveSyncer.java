@@ -54,7 +54,7 @@ public class DriveSyncer {
 						if (driveFile != null) {
 							driveFile = service.files().update(fileId, driveFile, textContent).execute();
 						} else {
-//							driveFile = service.files().insert(body, textContent).execute();
+							driveFile = service.files().insert(body, textContent).execute();
 							if (driveFile != null) {
 								fileId = driveFile.getId();
 								Utils.writeToFile(fileId, context, MyBackupAgent.FILE_ID);
