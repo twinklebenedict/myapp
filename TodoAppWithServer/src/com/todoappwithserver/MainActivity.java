@@ -34,10 +34,10 @@ public class MainActivity extends Activity {
 		save.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Task task = new Task("title", text.getText().toString());//test
+				Task task = new Task("title", text.getText().toString());// test
 				mDbHelper.addTask(task);
 				populateListView(list, mDbHelper);
-				text.setText(""); 
+				text.setText("");
 			}
 		});
 	}
