@@ -1,0 +1,6 @@
+To share project:
+1. Create project
+2. Copy project into git folder
+3. Delete .git file if any created inside project
+4. This should show all the files inside the project in git staging.
+3. commit these files and not the entire project
