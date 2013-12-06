@@ -49,7 +49,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 
 		// Create a new map of values, where column names are the keys
 		ContentValues values = new ContentValues();
-//		values.put(TaskEntry.COLUMN_NAME_TASK_ID, id);
+		// values.put(TaskEntry.COLUMN_NAME_TASK_ID, id);
 		values.put(TaskEntry.COLUMN_NAME_TITLE, task.getTitle());
 		values.put(TaskEntry.COLUMN_NAME_DESCRIPTION, task.getDescription());
 
@@ -58,34 +58,53 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 		newRowId = db.insert(TaskEntry.TABLE_NAME, TaskEntry.COLUMN_NAME_DESCRIPTION, values);
 		return newRowId;
 	}
-	
-	public List<Task> getAllTasks(){
+
+	public List<Task> getAllTasks() {
 		List<Task> tasks = new ArrayList<Task>();
 		// Select All Query
-	    String selectQuery = "SELECT  * FROM " + TaskEntry.TABLE_NAME;
-	    
-	    SQLiteDatabase db = this.getWritableDatabase();
-	    Cursor cursor = db.rawQuery(selectQuery, null);
-	 
-	    // looping through all rows and adding to list
-	    if (cursor.moveToFirst()) {
-	        do {
-	            Task task = new Task();
-	            task.setId(Integer.parseInt(cursor.getString(0)));
-	            task.setTitle(cursor.getString(2));
-	            task.setDescription(cursor.getString(3));
-	            // Adding contact to list
-	            tasks.add(task);
-	        } while (cursor.moveToNext());
-	    }
-	 
-	    // return contact list
-	    return tasks;
-	    
-	    
+		String selectQuery = "SELECT  * FROM " + TaskEntry.TABLE_NAME;
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Task task = new Task();
+				task.setId(Integer.parseInt(cursor.getString(0)));
+				task.setTitle(cursor.getString(2));
+				task.setDescription(cursor.getString(3));
+				// Adding contact to list
+				tasks.add(task);
+			} while (cursor.moveToNext());
+		}
+
+		// return contact list
+		return tasks;
+
+	}
+
+	public Task getTask(int id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		String[] projection = {
+				TaskEntry._ID,
+				TaskEntry.COLUMN_NAME_TITLE,
+				TaskEntry.COLUMN_NAME_DESCRIPTION};
+		
+		Cursor cursor = db.query(TaskEntry.TABLE_NAME, projection, TaskEntry._ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
+		if (cursor != null)
+			cursor.moveToFirst();
+
+		Task task = new Task(cursor.getString(1), cursor.getString(2));
+		task.setId(id);
+		// return contact
+		return task;
 	}
 	
-	public void readFromDb() {
-		
+	public void deleteTask(int taskId) {
+	    SQLiteDatabase db = this.getWritableDatabase();
+	    db.delete(TaskEntry.TABLE_NAME, TaskEntry._ID + " = ?",
+	            new String[] { String.valueOf(taskId) });
+	    db.close();
 	}
 }
