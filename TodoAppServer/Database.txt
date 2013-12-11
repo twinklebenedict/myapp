@@ -1,0 +1,9 @@
+CREATE TABLE TASK
+(
+    id              INT PRIMARY KEY AUTO_INCREMENT,
+    title    VARCHAR(30),
+    description    VARCHAR(200),
+    email         VARCHAR(30),
+    created     TIMESTAMP DEFAULT NOW()
+);
+
