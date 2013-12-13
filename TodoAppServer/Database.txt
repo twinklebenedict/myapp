@@ -7,3 +7,5 @@ CREATE TABLE TASK
     created     TIMESTAMP DEFAULT NOW()
 );
 
+select* from task;
+

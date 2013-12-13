@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
 				for (int i = 0; i < accounts.length; i++) {
 					if (accounts[i].name.equals(accountName)) {
 						mAccount = accounts[i];
-						credential.setSelectedAccountName(accountName);
+//						credential.setSelectedAccountName(accountName);
 						createSyncAccount(this, mAccount);
 						break;
 					}
@@ -151,7 +151,7 @@ public class MainActivity extends Activity {
 			if (resultCode == Activity.RESULT_OK) {
 				// Utils.saveFileToDrive(this, mAccount);
 			} else {
-				startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+//				startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
 			}
 			break;
 		case CAPTURE_IMAGE:
