@@ -115,7 +115,7 @@ public class MainActivity extends Activity {
 				for (int i = 0; i < accounts.length; i++) {
 					if (accounts[i].name.equals(accountName)) {
 						mAccount = accounts[i];
-						credential.setSelectedAccountName(accountName);
+//						credential.setSelectedAccountName(accountName);
 						createSyncAccount(this, mAccount);
 						break;
 					}
