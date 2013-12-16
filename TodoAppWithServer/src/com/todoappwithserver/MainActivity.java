@@ -1,7 +1,6 @@
 package com.todoappwithserver;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.accounts.Account;
@@ -22,6 +21,7 @@ import android.widget.ListView;
 
 import com.google.android.gms.common.AccountPicker;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.todoappwithserver.http.HttpTask;
 import com.todoappwithserver.model.Task;
 import com.todoappwithserver.tables.TaskDbHelper;
 import com.todoappwithserver.views.ListViewArrayAdapter;
@@ -45,6 +45,10 @@ public class MainActivity extends Activity {
 		Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
 		         true, null, null, null, null);
 		 startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
+		 
+		 //test http
+		HttpTask httpTask = new HttpTask();
+		httpTask.execute("http://localhost:8080/TodoAppServer/hello.htm");
 
 		// Create a list with check box later for this..
 
@@ -150,5 +154,6 @@ public class MainActivity extends Activity {
 		ContentResolver.setSyncAutomatically(account, Constants.CONTENT_AUTHORITY, true);
 		ContentResolver.addPeriodicSync(account, Constants.CONTENT_AUTHORITY, bundle, Constants.SYNC_FREQUENCY);
 	}
-
+	
+	
 }
