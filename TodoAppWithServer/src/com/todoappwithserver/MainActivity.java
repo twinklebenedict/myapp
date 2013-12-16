@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 		
 		//Account picker
 		Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-		         false, null, null, null, null);
+		         true, null, null, null, null);
 		 startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
 
 		// Create a list with check box later for this..
@@ -126,7 +126,7 @@ public class MainActivity extends Activity {
 			if (resultCode == Activity.RESULT_OK) {
 				// Utils.saveFileToDrive(this, mAccount);
 			} else {
-				startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+//				startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
 			}
 			break;
 		case CAPTURE_IMAGE:
