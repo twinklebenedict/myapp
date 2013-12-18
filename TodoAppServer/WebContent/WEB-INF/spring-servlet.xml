@@ -60,6 +60,9 @@
             </props>
         </property>
     </bean>
+    
+    <bean id="stringHttpMessageConverter" 
+       class="org.springframework.http.converter.StringHttpMessageConverter"/>
  
     <tx:annotation-driven />
     <bean id="transactionManager"

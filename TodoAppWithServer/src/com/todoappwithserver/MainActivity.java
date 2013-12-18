@@ -1,6 +1,7 @@
 package com.todoappwithserver;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.accounts.Account;
@@ -47,8 +48,8 @@ public class MainActivity extends Activity {
 		 startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
 		 
 		 //test http
-		HttpTask httpTask = new HttpTask();
-		httpTask.execute("http://107.108.202.232:8080/TodoAppServer/hello.htm");
+		/*HttpTask httpTask = new HttpTask(null);
+		httpTask.execute("http://107.108.202.232:8080/TodoAppServer/hello.htm");*/
 
 		// Create a list with check box later for this..
 
@@ -81,7 +82,9 @@ public class MainActivity extends Activity {
 		save.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Task task = new Task("title", text.getText().toString());// test
+				Calendar cal = Calendar.getInstance();
+				long timestamp = cal.getTimeInMillis();
+				Task task = new Task("title", text.getText().toString(), timestamp);// test
 				mDbHelper.addTask(task);
 				populateListView(list, mDbHelper);
 				text.setText("");

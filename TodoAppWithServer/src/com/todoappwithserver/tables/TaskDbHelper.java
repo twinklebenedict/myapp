@@ -15,9 +15,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class TaskDbHelper extends SQLiteOpenHelper {
 
 	private static final String TEXT_TYPE = " TEXT";
+	private static final String TIMESTAMP = " TIMESTAMP";
 	private static final String COMMA_SEP = ",";
 	private static final String SQL_CREATE_TABLE = "CREATE TABLE " + TaskEntry.TABLE_NAME + " (" + TaskEntry._ID + " INTEGER PRIMARY KEY," + TaskEntry.COLUMN_NAME_TASK_ID + TEXT_TYPE + COMMA_SEP
-			+ TaskEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP + TaskEntry.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + " )";
+			+ TaskEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP + TaskEntry.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP + TaskEntry.COLUMN_NAME_TIMESTAMP + TIMESTAMP + " )";
 
 	private static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " + TaskEntry.TABLE_NAME;
 
@@ -52,6 +53,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 		// values.put(TaskEntry.COLUMN_NAME_TASK_ID, id);
 		values.put(TaskEntry.COLUMN_NAME_TITLE, task.getTitle());
 		values.put(TaskEntry.COLUMN_NAME_DESCRIPTION, task.getDescription());
+		values.put(TaskEntry.COLUMN_NAME_TIMESTAMP, task.getTimeStamp());
 
 		// Insert the new row, returning the primary key value of the new row
 		long newRowId;
@@ -74,6 +76,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 				task.setId(Integer.parseInt(cursor.getString(0)));
 				task.setTitle(cursor.getString(2));
 				task.setDescription(cursor.getString(3));
+				task.setTimeStamp(cursor.getLong(4));
 				// Adding contact to list
 				tasks.add(task);
 			} while (cursor.moveToNext());
@@ -89,13 +92,14 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 		String[] projection = {
 				TaskEntry._ID,
 				TaskEntry.COLUMN_NAME_TITLE,
-				TaskEntry.COLUMN_NAME_DESCRIPTION};
+				TaskEntry.COLUMN_NAME_DESCRIPTION,
+				TaskEntry.COLUMN_NAME_TIMESTAMP};
 		
 		Cursor cursor = db.query(TaskEntry.TABLE_NAME, projection, TaskEntry._ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		Task task = new Task(cursor.getString(1), cursor.getString(2));
+		Task task = new Task(cursor.getString(1), cursor.getString(2), cursor.getLong(4));
 		task.setId(id);
 		// return contact
 		return task;

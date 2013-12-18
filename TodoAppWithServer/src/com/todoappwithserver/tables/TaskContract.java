@@ -13,6 +13,7 @@ public final class TaskContract {
 	        public static final String COLUMN_NAME_TASK_ID = "taskid";
 	        public static final String COLUMN_NAME_TITLE = "title";
 	        public static final String COLUMN_NAME_DESCRIPTION = "description";
+	        public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
 	    }
 
 }

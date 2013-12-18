@@ -5,12 +5,14 @@ public class Task {
 	int id;
 	String title;
 	String description;
+	long timeStamp;
 	
 	public Task() {	}
 	
-	public Task(String title, String description) {
+	public Task(String title, String description, long timeStamp) {
 		this.title = title;
 		this.description = description;
+		this.timeStamp = timeStamp;
 	}
 	
 	public int getId() {
@@ -23,6 +25,10 @@ public class Task {
 		return description;
 	}
 
+	public long getTimeStamp() {
+		return timeStamp;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -33,6 +39,10 @@ public class Task {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setTimeStamp(long timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 	
 	

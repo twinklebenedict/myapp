@@ -1,10 +1,10 @@
 CREATE TABLE TASK
 (
-    id              INT PRIMARY KEY AUTO_INCREMENT,
+    id              INT PRIMARY KEY,
     title    VARCHAR(30),
     description    VARCHAR(200),
-    email         VARCHAR(30),
-    created     TIMESTAMP DEFAULT NOW()
+    email         VARCHAR(100),
+    timestamp     BIGINT
 );
 
 select* from task;

@@ -12,7 +12,6 @@ public class Task {
 	
 	@Id
 	@Column (name = "ID")
-	@GeneratedValue
 	private Integer id;
 	
 	@Column (name = "TITLE")
@@ -23,6 +22,10 @@ public class Task {
 	
 	@Column (name = "EMAIL")
 	private String email;
+	
+	@Column (name = "TIMESTAMP")
+	private long timestamp;
+
 
 	public Integer getId() {
 		return id;
@@ -44,6 +47,10 @@ public class Task {
 		return description;
 	}
 
+	public long getTimestamp() {
+		return timestamp;
+	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -54,6 +61,10 @@ public class Task {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 }
