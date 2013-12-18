@@ -8,4 +8,5 @@ CREATE TABLE TASK
 );
 
 select* from task;
+truncate table task;
 

@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
 		 
 		 //test http
 		HttpTask httpTask = new HttpTask();
-		httpTask.execute("http://localhost:8080/TodoAppServer/hello.htm");
+		httpTask.execute("http://107.108.202.232:8080/TodoAppServer/hello.htm");
 
 		// Create a list with check box later for this..
 

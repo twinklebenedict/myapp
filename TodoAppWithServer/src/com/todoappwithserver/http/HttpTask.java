@@ -22,6 +22,7 @@ public class HttpTask extends AsyncTask<String, Void, String>{
 	        HttpGet httpGet = new HttpGet(url);
 	        try {
 	          HttpResponse execute = client.execute(httpGet);
+	          execute.getStatusLine();
 	          InputStream content = execute.getEntity().getContent();
 
 	          BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
