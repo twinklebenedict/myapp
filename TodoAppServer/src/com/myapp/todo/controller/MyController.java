@@ -78,7 +78,7 @@ public class MyController {
 	@ResponseBody
 	public String getTasks(@RequestParam("email") String email ,HttpServletRequest request) {
 		//Return tasks only for this email
-		List<Task> tasks = taskService.listTask();
+		List<Task> tasks = taskService.getTasks(email);
 		JsonArray taskArrray = new JsonArray();
 		for (Task task : tasks) {
 			if(task.getEmail().equals(email)){

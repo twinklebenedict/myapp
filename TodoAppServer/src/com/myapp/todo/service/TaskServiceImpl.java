@@ -32,4 +32,9 @@ public class TaskServiceImpl implements TaskService{
 		
 	}
 
+	@Override
+	public List<Task> getTasks(String email) {
+		return taskDAO.getTasks(email);
+	}
+
 }

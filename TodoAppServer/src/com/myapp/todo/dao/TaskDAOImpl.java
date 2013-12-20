@@ -33,4 +33,9 @@ public class TaskDAOImpl implements TaskDAO {
 		}
 	}
 
+	@Override
+	public List<Task> getTasks(String email) {
+		return sessionFactory.getCurrentSession().createQuery("from Task where email = "+email).list();
+	}
+
 }
