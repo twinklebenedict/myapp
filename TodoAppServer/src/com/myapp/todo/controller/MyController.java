@@ -1,6 +1,7 @@
 package com.myapp.todo.controller;
 
 import java.io.BufferedReader;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.myapp.todo.form.Task;
@@ -44,13 +49,17 @@ public class MyController {
 		
 		try{
 			JsonObject jsonObject = new JsonParser().parse(body.toString()).getAsJsonObject();
-			Task task = new Task();
-			task.setId(jsonObject.get("id").getAsInt());
-			task.setTitle(jsonObject.get("title").getAsString());
-			task.setDescription(jsonObject.get("description").getAsString());
-			task.setEmail(jsonObject.get("email").getAsString());
-			task.setTimestamp(jsonObject.get("timestamp").getAsLong());
-			taskService.addTask(task);
+			JsonArray taskArray = (JsonArray)jsonObject.get("tasks");
+			for(JsonElement taskEle : taskArray){
+				JsonObject taskObj = (JsonObject) taskEle;
+				Task task = new Task();
+				task.setId(taskObj.get("id").getAsInt());
+				task.setTitle(taskObj.get("title").getAsString());
+				task.setDescription(taskObj.get("description").getAsString());
+				task.setEmail(taskObj.get("email").getAsString());
+				task.setTimestamp(taskObj.get("timestamp").getAsLong());
+				taskService.addTask(task);
+			}
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -63,6 +72,30 @@ public class MyController {
 		taskService.addTask(task);*/
 		
 		return new ModelAndView("hello", "message", message);
+	}
+	
+	@RequestMapping("/getTasks")
+	@ResponseBody
+	public String getTasks(@RequestParam("email") String email ,HttpServletRequest request) {
+		//Return tasks only for this email
+		List<Task> tasks = taskService.listTask();
+		JsonArray taskArrray = new JsonArray();
+		for (Task task : tasks) {
+			if(task.getEmail().equals(email)){
+				JsonObject taskObj = new JsonObject();
+				taskObj.addProperty("id", task.getId());
+				taskObj.addProperty("title", task.getTitle());
+				taskObj.addProperty("description", task.getDescription());
+				taskObj.addProperty("email", task.getEmail());
+				taskObj.addProperty("timestamp", task.getTimestamp());
+				taskArrray.add(taskObj);
+			}
+			
+		}
+		JsonObject finalObj = new JsonObject();
+		finalObj.add("tasks", taskArrray);
+		return finalObj.toString();
+//		return new ModelAndView("hello", "message", jsonObject);
 	}
 
 }

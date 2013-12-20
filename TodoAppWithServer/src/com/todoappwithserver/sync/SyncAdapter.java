@@ -20,8 +20,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter{
 	  @Override
 	  public void onPerformSync(Account account, Bundle bundle, String authority,
 	      ContentProviderClient provider, SyncResult syncResult) {
-		  DataSyncer dataSyncer = DataSyncer.getInstance(mContext, account);
-		  dataSyncer.syncData();
+		 /* DataSyncer dataSyncer = DataSyncer.getInstance(mContext, account);
+		  dataSyncer.syncData();*/
 	  }
 
 

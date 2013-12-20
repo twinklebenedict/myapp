@@ -28,28 +28,24 @@ import com.todoappwithserver.tables.TaskDbHelper;
 import com.todoappwithserver.views.ListViewArrayAdapter;
 
 public class MainActivity extends Activity {
-	
+
 	Account mAccount;
 
 	public static final int REQUEST_ACCOUNT_PICKER = 1;
 	static final int REQUEST_AUTHORIZATION = 2;
 	static final int CAPTURE_IMAGE = 3;
 	private GoogleAccountCredential credential;
+	TaskDbHelper mDbHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		final TaskDbHelper mDbHelper = new TaskDbHelper(getApplicationContext());
-		
-		//Account picker
-		Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-		         true, null, null, null, null);
-		 startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
-		 
-		 //test http
-		/*HttpTask httpTask = new HttpTask(null);
-		httpTask.execute("http://107.108.202.232:8080/TodoAppServer/hello.htm");*/
+		 mDbHelper = new TaskDbHelper(getApplicationContext());
+
+		// Account picker
+		Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[] { "com.google" }, true, null, null, null, null);
+		startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
 
 		// Create a list with check box later for this..
 
@@ -58,21 +54,21 @@ public class MainActivity extends Activity {
 		final ListView list = (ListView) findViewById(R.id.listView);
 		final Button delete = (Button) findViewById(R.id.delete);
 		populateListView(list, mDbHelper);
-		
+
 		delete.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				List<Integer> taskIds = new ArrayList<Integer>(); 
+				List<Integer> taskIds = new ArrayList<Integer>();
 				for (int i = 0; i < list.getChildCount(); i++) {
 					CheckBox checkBox = (CheckBox) list.getChildAt(i);
-					if(checkBox != null && checkBox.isChecked()){
+					if (checkBox != null && checkBox.isChecked()) {
 						taskIds.add(checkBox.getId());
 					}
 				}
-				
-				for (int i = 0; i <taskIds.size(); i++) {
-//					Task task = mDbHelper.getTask(taskIds.get(i));
+
+				for (int i = 0; i < taskIds.size(); i++) {
+					// Task task = mDbHelper.getTask(taskIds.get(i));
 					mDbHelper.deleteTask(taskIds.get(i));
 				}
 				populateListView(list, mDbHelper);
@@ -111,7 +107,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	@Override
 	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 		switch (requestCode) {
@@ -122,8 +118,9 @@ public class MainActivity extends Activity {
 				for (int i = 0; i < accounts.length; i++) {
 					if (accounts[i].name.equals(accountName)) {
 						mAccount = accounts[i];
-//						credential.setSelectedAccountName(accountName);
+						// credential.setSelectedAccountName(accountName);
 						createSyncAccount(this, mAccount);
+						syncDataWithServer();
 						break;
 					}
 				}
@@ -133,7 +130,7 @@ public class MainActivity extends Activity {
 			if (resultCode == Activity.RESULT_OK) {
 				// Utils.saveFileToDrive(this, mAccount);
 			} else {
-//				startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+				// startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
 			}
 			break;
 		case CAPTURE_IMAGE:
@@ -142,7 +139,7 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-	
+
 	public static void createSyncAccount(Context context, Account account) {
 		if (account == null) {
 			return;
@@ -157,6 +154,13 @@ public class MainActivity extends Activity {
 		ContentResolver.setSyncAutomatically(account, Constants.CONTENT_AUTHORITY, true);
 		ContentResolver.addPeriodicSync(account, Constants.CONTENT_AUTHORITY, bundle, Constants.SYNC_FREQUENCY);
 	}
-	
-	
+
+	private void syncDataWithServer() {
+		// test http
+		if (mAccount != null) {
+			HttpTask httpTask = new HttpTask(mDbHelper, mAccount);
+			httpTask.execute("http://107.108.202.232:8080/TodoAppServer/getTasks.htm");
+		}
+	}
+
 }

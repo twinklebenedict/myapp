@@ -50,7 +50,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 
 		// Create a new map of values, where column names are the keys
 		ContentValues values = new ContentValues();
-		// values.put(TaskEntry.COLUMN_NAME_TASK_ID, id);
+		values.put(TaskEntry.COLUMN_NAME_TASK_ID, task.getId());
 		values.put(TaskEntry.COLUMN_NAME_TITLE, task.getTitle());
 		values.put(TaskEntry.COLUMN_NAME_DESCRIPTION, task.getDescription());
 		values.put(TaskEntry.COLUMN_NAME_TIMESTAMP, task.getTimeStamp());
