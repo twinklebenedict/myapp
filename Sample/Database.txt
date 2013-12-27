@@ -1,0 +1,12 @@
+CREATE TABLE TASK
+(
+    id              INT PRIMARY KEY,
+    title    VARCHAR(30),
+    description    VARCHAR(200),
+    email         VARCHAR(100),
+    timestamp     BIGINT
+);
+
+select* from task;
+truncate table task;
+
