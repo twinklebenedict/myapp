@@ -25,15 +25,15 @@ public class MyController {
 	@Autowired
 	TaskService taskService;
 
-	@RequestMapping("/hello")
-	public ModelAndView helloWorld(HttpServletRequest request) {
-
+	@RequestMapping("/login")
+	public ModelAndView helloWorld(@RequestParam("email") String email, @RequestParam("password") String password, HttpServletRequest request) {
+		
 		String message = "Hello World";
 		
 		return new ModelAndView("hello", "message", message);
 	}
 	
-	@RequestMapping("/getTasks")
+	/*@RequestMapping("/getTasks")
 	@ResponseBody
 	public String getTasks(@RequestParam("email") String email ,HttpServletRequest request) {
 		//Return tasks only for this email
@@ -55,6 +55,6 @@ public class MyController {
 		finalObj.add("tasks", taskArrray);
 		return finalObj.toString();
 //		return new ModelAndView("hello", "message", jsonObject);
-	}
+	}*/
 
 }
