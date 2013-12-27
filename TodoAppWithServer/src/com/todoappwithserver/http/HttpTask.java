@@ -11,14 +11,16 @@ import java.util.Set;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+
+import android.accounts.Account;
+import android.content.Context;
+import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
+import android.widget.ListView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -26,10 +28,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.todoappwithserver.model.Task;
 import com.todoappwithserver.tables.TaskDbHelper;
-
-import android.accounts.Account;
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
+import com.todoappwithserver.views.ListViewArrayAdapter;
 
 public class HttpTask extends AsyncTask<String, Void, String> {
 
@@ -37,16 +36,20 @@ public class HttpTask extends AsyncTask<String, Void, String> {
 	List<Map<String, String>> params;
 	TaskDbHelper mDbHelper;
 	Account account;
+	ListView listView;
+	Context context;
 
 	public HttpTask(List<Map<String, String>> params) {
 		super();
 		this.params = params;
 	}
 
-	public HttpTask(TaskDbHelper mDbHelper, Account account) {
+	public HttpTask(TaskDbHelper mDbHelper, Account account, ListView listView, Context context) {
 		super();
 		this.mDbHelper = mDbHelper;
 		this.account = account;
+		this.listView = listView;
+		this.context = context;
 	}
 
 	public String putData(String... urls) {
@@ -114,6 +117,7 @@ public class HttpTask extends AsyncTask<String, Void, String> {
 					task.setTimeStamp(taskObj.get("timestamp").getAsLong());
 					mDbHelper.addTask(task);
 				}
+				populateListView();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -149,6 +153,19 @@ public class HttpTask extends AsyncTask<String, Void, String> {
 			}
 		}
 		return response;
+	}
+	
+	private List<String> populateListView() {
+		List<Task> tasks = mDbHelper.getAllTasks();
+		List<String> taskDes = new ArrayList<String>();
+		for (int i = 0; i < tasks.size(); i++) {
+			if (tasks.get(i).getDescription() != null) {
+				taskDes.add(tasks.get(i).getDescription());
+			}
+		}
+		ListViewArrayAdapter adapter = new ListViewArrayAdapter(context, tasks, taskDes);
+		listView.setAdapter(adapter);
+		return null;
 	}
 
 }

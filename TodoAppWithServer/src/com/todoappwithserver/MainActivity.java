@@ -10,7 +10,10 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -41,10 +44,10 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		 mDbHelper = new TaskDbHelper(getApplicationContext());
+		mDbHelper = new TaskDbHelper(getApplicationContext());
 
 		// Account picker
-		Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[] { "com.google" }, true, null, null, null, null);
+		Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[] { "com.google" }, false, null, null, null, null);
 		startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
 
 		// Create a list with check box later for this..
@@ -157,8 +160,13 @@ public class MainActivity extends Activity {
 
 	private void syncDataWithServer() {
 		// test http
-		if (mAccount != null) {
-			HttpTask httpTask = new HttpTask(mDbHelper, mAccount);
+		// Check for first installation
+		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean firstRun = p.getBoolean(Constants.APP_FIRST_RUN, true);
+		ListView list = (ListView) findViewById(R.id.listView);
+		if (mAccount != null && firstRun) {
+			p.edit().putBoolean(Constants.APP_FIRST_RUN, false).commit();
+			HttpTask httpTask = new HttpTask(mDbHelper, mAccount, list, getBaseContext());
 			httpTask.execute("http://107.108.202.232:8080/TodoAppServer/getTasks.htm");
 		}
 	}

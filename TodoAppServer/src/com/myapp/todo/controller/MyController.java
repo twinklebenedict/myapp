@@ -1,6 +1,5 @@
 package com.myapp.todo.controller;
 
-import java.io.BufferedReader;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.myapp.todo.form.Task;
 import com.myapp.todo.service.TaskService;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 @Controller
 public class MyController {
