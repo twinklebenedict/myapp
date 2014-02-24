@@ -33,8 +33,16 @@ public class MyController {
 		return new ModelAndView("hello", "message", message);
 	}
 	
+	@RequestMapping("/test")
+	public ModelAndView test(@RequestBody String body, HttpServletRequest request) {
+		String message = body;
+		
+		return new ModelAndView("hello", "message", message);
+	}
+	
 	@RequestMapping("/oauth2callback")
 	public ModelAndView helloWorld(HttpServletRequest request) {
+		
 		
 		String message = "Hello World";
 		
