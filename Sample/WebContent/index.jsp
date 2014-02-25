@@ -45,11 +45,11 @@ function myTimer()
                 });
                 document.getElementById("demo").innerHTML = logs;
             } catch (e) {
-                alert('json parse error');
+                //alert('json parse error');
             }
         },
         error: function (request, status, error) {
-            alert(request.responseText);
+            //alert(request.responseText);
         }
     });
 	
