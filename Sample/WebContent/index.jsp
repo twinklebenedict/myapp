@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -14,13 +15,45 @@
 </form>
 
 <script>
-var myVar=setInterval(function(){myTimer()},1000);
+var myVar=setInterval(function(){myTimer()},2000);
 
 function myTimer()
 {
-var d=new Date();
-var t=d.toLocaleTimeString();
-document.getElementById("demo").innerHTML=t;
+	
+	var d=new Date();
+	var t=d.toLocaleTimeString();
+	document.getElementById("demo").innerHTML=t;
+	
+	$.ajax({
+        type: 'GET',
+        url: 'showlogs.htm',
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        cache: false,
+        success: function(data, status, xmlHttp) {
+            try {
+            	//alert(data);
+            	//var obj = JSON.stringify(data);
+            	var logs = "";
+                //alert(obj);
+                
+                $.each(data, function(index, element) {
+                	logs += element + "<br/>";
+                    /* $('demo').append($('<div>', {
+                        text: element
+                    })); */
+                });
+                document.getElementById("demo").innerHTML = logs;
+            } catch (e) {
+                alert('json parse error');
+            }
+        },
+        error: function (request, status, error) {
+            alert(request.responseText);
+        }
+    });
+	
+
 }
 </script>
 </body>

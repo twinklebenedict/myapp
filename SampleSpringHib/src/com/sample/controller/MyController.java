@@ -25,7 +25,7 @@ public class MyController {
 	@Autowired
 	TaskService taskService;
 
-	@RequestMapping(value = "/showlogs")
+	/*@RequestMapping(value = "/showlogs")
 	@ResponseBody
 	public String helloWorld() {
 		JsonObject jsonObj = new JsonObject();
@@ -41,7 +41,7 @@ public class MyController {
 		String message = body;
 		
 		return new ModelAndView("hello", "message", message);
-	}
+	}*/
 	
 	/*@RequestMapping("/oauth2callback")
 	public ModelAndView helloWorld(HttpServletRequest request) {
@@ -52,11 +52,11 @@ public class MyController {
 		return new ModelAndView("hello", "message", message);
 	}*/
 	
-	/*@RequestMapping("/login")
+	@RequestMapping("/login")
 	public ModelAndView helloWorld(@RequestParam("email") String email, @RequestParam("password") String password, HttpServletRequest request) {
 		
 		String message = "Hello World";
 		
 		return new ModelAndView("hello", "message", message);
-	}*/
+	}
 }
