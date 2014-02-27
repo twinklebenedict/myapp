@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import redis.clients.jedis.Jedis;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
@@ -29,10 +31,13 @@ public class MyController {
 	@ResponseBody
 	public String helloWorld() {
 		JsonObject jsonObj = new JsonObject();
-		for (String log: logs) {
+		Jedis jedis = new Jedis("localhost");
+	    jedis.connect();
+	    long len = jedis.llen("log");
+	    List<String> logs = jedis.lrange("log", 0, len);
+	    for (String log: logs) {
 			jsonObj.addProperty(log, log);
 		}
-		
 		return jsonObj.toString();
 	}
 	
@@ -42,8 +47,13 @@ public class MyController {
 		JsonObject jsonObj =  new JsonParser().parse(body.toString()).getAsJsonObject();
 		String log = jsonObj.get("message").getAsString();
 		if(log != null && !log.isEmpty()){
-			logs.add(log);
+			Jedis jedis = new Jedis("localhost");
+		    jedis.connect();
+		    jedis.lpush("log", log);
+//			logs.add(log);
 		}
+		
+		 
 		
 		return new ModelAndView("hello", "message", message);
 	}
