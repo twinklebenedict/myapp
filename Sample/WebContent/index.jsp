@@ -8,21 +8,26 @@
 <title>Insert title here</title>
 </head>
 <body>
-<p>A script on this page starts this clock:</p>
-
-<form action="login.htm"  method="post">
-<p id="demo"></p>
-</form>
+<p id="status">Show Logs:</p>
 
 <script>
-var myVar=setInterval(function(){myTimer()},2000);
+var btn=document.createElement("BUTTON");
+var t=document.createTextNode("SEND MAIL");
+btn.appendChild(t);
+</script>
 
-function myTimer()
+<p id="logs"></p>
+<p id="sendmail"></p>
+
+<script>
+var myVar=setInterval(function(){showlogs()},5000);
+
+function showlogs()
 {
 	
 	var d=new Date();
 	var t=d.toLocaleTimeString();
-	document.getElementById("demo").innerHTML=t;
+	document.getElementById("logs").innerHTML=t;
 	
 	$.ajax({
         type: 'GET',
@@ -32,18 +37,22 @@ function myTimer()
         cache: false,
         success: function(data, status, xmlHttp) {
             try {
-            	//alert(data);
-            	//var obj = JSON.stringify(data);
             	var logs = "";
-                //alert(obj);
+            	
+            	var arr = data.logs;
+            	
+            	for (var d = 0, len = arr.length; d < len; d += 1) {
+            		logs += arr[d] + "<br/>";
+                }
                 
-                $.each(data, function(index, element) {
+                /* $.each(data, function(index, element) {
                 	logs += element + "<br/>";
-                    /* $('demo').append($('<div>', {
-                        text: element
-                    })); */
-                });
-                document.getElementById("demo").innerHTML = logs;
+                }); */
+                
+                document.getElementById("logs").innerHTML = logs;
+                document.body.appendChild(btn);
+                btn.onclick=function(){sendmail(data)};
+                
             } catch (e) {
                 //alert('json parse error');
             }
@@ -52,8 +61,25 @@ function myTimer()
             //alert(request.responseText);
         }
     });
-	
+}
 
+function sendmail(data){
+	$.ajax({
+        type: 'POST',
+        url: 'sendmail.htm',
+        data: JSON.stringify(data),
+        dataType: 'text',
+        contentType: "application/json; charset=utf-8",
+        cache: false,
+        success: function(data, status, xmlHttp) {
+        	document.getElementById("sendmail").innerHTML = data;
+        },
+        error: function (request, status, error) {
+        	$('body').html(request.responseText);
+        	//document.write(request.responseText);
+            //alert(request.responseText);
+        }
+	});
 }
 </script>
 </body>
